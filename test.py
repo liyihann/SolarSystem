@@ -13,11 +13,14 @@ def draw():
     glPushMatrix() #压栈
 
     glutWireSphere(1, 20, 16) #绘制太阳
-    glRotatef(GLfloat(year),0,1,0) #沿y轴旋转
+
+    glRotatef(GLfloat(year),1,1,0) #沿y轴旋转
     glTranslatef(3, 0, 0) #将场景中的物体沿x轴正方向移动2个单位长
     glRotatef(GLfloat(day),0,1,0) #沿y轴旋转
 
     glutWireSphere(0.2,10,8) #绘制行星
+
+
     glPopMatrix() #出栈
     #glutWireTeapot(0.5)
     glutSwapBuffers()
@@ -62,5 +65,5 @@ init() #初始化
 glutDisplayFunc(draw) #执行显示
 glutIdleFunc(draw)#动画效果
 glutReshapeFunc(reshape)
-glutKeyboardFunc(keyboard)
+#glutKeyboardFunc(keyboard)
 glutMainLoop() #进入glut事件处理循环
