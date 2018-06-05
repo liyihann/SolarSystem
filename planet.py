@@ -25,7 +25,6 @@ cam_position=[0 for i in range(3)]
 cam_angle_u = 0.3
 cam_angle_v = 0.3
 state = 1
-g_cactus=[0 for i in range(16)]#贴图
 
 def init():
     global g_text,sun_texture,mercury_texture,venus_texture,earth_texture,mars_texture,jupiter_texture,saturn_texture,uranus_texture,neptune_texture
@@ -38,47 +37,33 @@ def init():
     glEnable(GL_COLOR_MATERIAL)
     glEnable(GL_TEXTURE_2D)
     g_text=gluNewQuadric()
-    sun_texture = load_texture("./texture/sun.bmp", has_alpha=False)
-    mercury_texture = load_texture("./texture/mercury.bmp", has_alpha=False)
-    venus_texture = load_texture("./texture/venus.jpg", has_alpha=False)
-    earth_texture = load_texture("./texture/earth.jpg", has_alpha=False)
-    mars_texture = load_texture("./texture/mars.jpg", has_alpha=False)
-    jupiter_texture = load_texture("./texture/jupiter.bmp", has_alpha=False)
-    saturn_texture = load_texture("./texture/saturn.jpg", has_alpha=False)
-    uranus_texture = load_texture("./texture/uranus.jpg", has_alpha=False)
-    neptune_texture = load_texture("./texture/neptune.jpg", has_alpha=False)
+    sun_texture = load_texture("./texture/sun.bmp")
+    mercury_texture = load_texture("./texture/mercury.bmp")
+    venus_texture = load_texture("./texture/venus.jpg")
+    earth_texture = load_texture("./texture/earth.jpg")
+    mars_texture = load_texture("./texture/mars.jpg")
+    jupiter_texture = load_texture("./texture/jupiter.bmp")
+    saturn_texture = load_texture("./texture/saturn.jpg")
+    uranus_texture = load_texture("./texture/uranus.jpg")
+    neptune_texture = load_texture("./texture/neptune.jpg")
 
 def init_stars():
     for i in range(0,2000):
         for j in range(0,3):
             star[i][j] = random.random()% 20 - 10
 
-def load_texture(filename,has_alpha):
-    """
-     Load a texture from a position, generates a valid OpenGL texture object
-     :rtype: Texture
-     :param fn: texture file name
-     :param has_alpha: True if texture has alpha channel
-     :return: a valid OpenGL texture object
-     """
-    global g_cactus
+def load_texture(filename):
     image = Image.open(filename)
     ix = image.size[0]
     iy = image.size[1]
-    if has_alpha:
-        image = image.tobytes("raw", "RGBA", 0, -1)
-    else:
-        image = image.tobytes("raw", "RGBX", 0, -1)
 
+    image = image.tobytes("raw", "RGBX", 0, -1)
     # Create Texture
     texture = glGenTextures(1)
     glBindTexture(GL_TEXTURE_2D, texture)  # 2d texture (x and y size)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
 
-    if has_alpha:
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ix, iy, 0, GL_RGBA, GL_UNSIGNED_BYTE, image)
-    else:
-        glTexImage2D(GL_TEXTURE_2D, 0, 3, ix, iy, 0, GL_RGBA, GL_UNSIGNED_BYTE, image)
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, ix, iy, 0, GL_RGBA, GL_UNSIGNED_BYTE, image)
     # set the texture's minification properties (mapping textures to bigger areas)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
     # set the texture's stretching properties (mapping textures to smaller areas)
@@ -98,16 +83,12 @@ def stars():
 
 def drawSun():
     glPushMatrix()
-    #glBindTexture(GL_TEXTURE_2D, g_cactus[0])
     glBindTexture(GL_TEXTURE_2D,sun_texture)
     gluSphere(g_text,0.6,32,32)
-    # gluQuadricTexture(g_text,GLU_TRUE)#建立纹理坐标
-    # gluQuadricDrawStyle(g_text, GLU_FILL)
     glPopMatrix()
 
 def drawMercury():
     glPushMatrix()
-   #glBindTexture(GL_TEXTURE_2D, g_cactus[1])
     glBindTexture(GL_TEXTURE_2D, mercury_texture)
     glRotatef (float(mercuryYear), 0.0, 0.0, 1.0)
     glTranslatef (0.8, 0.0, 0.0)
@@ -117,7 +98,6 @@ def drawMercury():
 
 def drawVenus():
     glPushMatrix()
-    #glBindTexture(GL_TEXTURE_2D, g_cactus[2])
     glBindTexture(GL_TEXTURE_2D, venus_texture)
     glRotatef (GLfloat(venusYear), 0.0, 0.0, 1.0)
     glTranslatef (1.3, 0.0, 0.0)
@@ -127,20 +107,15 @@ def drawVenus():
 
 def drawEarth():
     glPushMatrix()
-    #glBindTexture(GL_TEXTURE_2D, g_cactus[3])
     glBindTexture(GL_TEXTURE_2D, earth_texture)
     glRotatef (GLfloat(year), 0.0, 0.0, 1.0)
     glTranslatef (1.8, 0.0, 0.0)
     glRotatef (GLfloat(day), 0.0, 0.0, 1.0)
-    # material_earth()
-    #gluQuadricTexture(g_text,GLU_TRUE)              #建立纹理坐标
-    #gluQuadricDrawStyle(g_text,GLU_FILL)           #用面填充
     gluSphere(g_text,0.16, 20, 16) #draw smaller planet
     glPopMatrix()
 
 def drawMars():
     glPushMatrix()
-    #glBindTexture(GL_TEXTURE_2D, g_cactus[4])
     glBindTexture(GL_TEXTURE_2D, mars_texture)
     glRotatef (GLfloat(marsYear), 0.0, 0.0, 1.0)
     glTranslatef (2.2, 0.0, 0.0)
@@ -150,7 +125,6 @@ def drawMars():
 
 def drawJupiter():
     glPushMatrix()
-    #glBindTexture(GL_TEXTURE_2D, g_cactus[5])
     glBindTexture(GL_TEXTURE_2D, mars_texture)
     glRotatef (GLfloat(jupiterYear), 0.0, 0.0, 1.0)
     glTranslatef (2.7, 0.0, 0.0)
@@ -168,7 +142,6 @@ def park():
 
 def drawSaturn():
     glPushMatrix()
-    # glBindTexture(GL_TEXTURE_2D, g_cactus[6])
     glBindTexture(GL_TEXTURE_2D, saturn_texture)
     glRotatef (GLfloat(saturnYear), 0.0, 0.0, 1.0)
 
@@ -176,13 +149,11 @@ def drawSaturn():
     glRotatef (GLfloat(day), 0.0, 0.0, 1.0)
     gluSphere(g_text,0.14, 20, 16) #draw smaller planet
     glRotatef(0.2, 1.0, 0.0, 0.0)
-    #auxSolidCylinder(0.15, 0.01)
     park()
     glPopMatrix()
 
 def drawUranus():
     glPushMatrix()
-    # glBindTexture(GL_TEXTURE_2D, g_cactus[7])
     glBindTexture(GL_TEXTURE_2D, uranus_texture)
     glRotatef (GLfloat(uranusYear), 0.0, 0.0, 1.0)
     glTranslatef (3.55, 0.0, 0.0)
@@ -192,7 +163,6 @@ def drawUranus():
 
 def drawNeptune():
     glPushMatrix()
-    # glBindTexture(GL_TEXTURE_2D, g_cactus[8])
     glBindTexture(GL_TEXTURE_2D, neptune_texture)
     glRotatef (GLfloat(jupiterYear), 0.0, 0.0, 1.0)
     glTranslatef (3.8, 0.0, 0.0)
@@ -226,11 +196,6 @@ def rotate():
     neptuneYear+=0.05
     if neptuneYear>=360:
         neptuneYear-=360
-    # global day
-    # day+=10
-    # if day>=360:
-    #     day=day-360
-    # glutPostRedisplay()
     glutPostRedisplay()
 
 
@@ -251,8 +216,6 @@ def draw():
     glEnable(GL_TEXTURE_GEN_T)
     glEnable(GL_TEXTURE_2D)
     stars()
-    # glBindTexture(GL_TEXTURE_2D, g_cactus[1])
-    # gluSphere(g_text,0.4,48,48)
     stars()
     drawSun()
     drawMercury()
@@ -286,124 +249,12 @@ def reshape(w,h):
 
 
 
-# def orbitL():
-#     global day,mercuryYear,venusYear,year,marsYear,jupiterYear,saturnYear,uranusYear,neptuneYear
-#     mercuryYear=(mercuryYear+12)%360
-#     venusYear=(venusYear+20)%360
-#     year= (year + 8) % 360
-#     marsYear=(marsYear+6)%360
-#     jupiterYear=(jupiterYear+5)%360
-#     saturnYear=(saturnYear+4)%360
-#     uranusYear=(uranusYear+3)%360
-#     neptuneYear=(neptuneYear+1)%360
-#     day=(day+30)%360
-#
-# def orbitR():
-#     global day,mercuryYear,venusYear,year,marsYear,jupiterYear,saturnYear,uranusYear,neptuneYear
-#     mercuryYear=(mercuryYear-12)%360
-#     venusYear=(venusYear-20)%360
-#     year= (year - 8) % 360
-#     marsYear=(marsYear-6)%360
-#     jupiterYear=(jupiterYear-5)%360
-#     saturnYear=(saturnYear-4)%360
-#     uranusYear=(uranusYear-3)%360
-#     neptuneYear=(neptuneYear-1)%360
-#     day=(day-30)%360
-
 def myidle():
     global day
     day+=5
     if day>=360:
         day=day-360
     glutPostRedisplay()
-
-# def keyboard(key,x,y):
-#     global day,year,light_angle,cam_radius,cam_angle_v,cam_angle_u
-#     if key=='f':
-#         day = (day+10)%360
-#         glutPostRedisplay()
-#         return
-#     elif key =='F':
-#         day = (day - 10 )%360
-#         glutPostRedisplay()
-#         return
-#     elif key =='y':
-#         year = (year + 5) % 360
-#         glutPostRedisplay()
-#         return
-#     elif key =='Y':
-#         year = (year - 5) % 360
-#         glutPostRedisplay()
-#         return
-#     elif key == 'l':
-#         light_angle+=2.0/90
-#         #if(light_position1>1.0)light_position1=0.0
-#         glutPostRedisplay()
-#         return
-#     elif key == 'L':
-#         light_angle-=2.0/90
-#         #if(light_position1>1.0)light_position1=0.0
-#         glutPostRedisplay()
-#         return
-#     elif key == 'k':
-#          cam_radius+=0.2
-#          cPosition()
-#          glutPostRedisplay()
-#          return
-#          #glLoadIdentity()
-#         #camera_position+=0.1
-#         #gluLookAt(camera_position,camera_position, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
-#         #glutPostRedisplay()
-#     elif key == 'K':
-#          cam_radius-=0.2
-#          cPosition()
-#          glutPostRedisplay()
-#          return
-#          #glLoadIdentity()
-#         #camera_position+=0.1
-#         #gluLookAt(camera_position,camera_position, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
-#         #glutPostRedisplay()
-#     elif key == 'w':
-#         cam_angle_v+=1.0/30
-#         if cam_angle_v>1.0:
-#             cam_angle_v=1.0
-#         cPosition()
-#         glutPostRedisplay()
-#         return
-#     elif key == 's':
-#         cam_angle_v-=1.0/30
-#         if cam_angle_v<-1.0:
-#             cam_angle_v=-1.0
-#         cPosition()
-#         glutPostRedisplay()
-#         return
-#     elif key == 'a':
-#         cam_angle_u+=1.0/30
-#         cPosition()
-#         glutPostRedisplay()
-#         return
-#     elif key == 'd':
-#         cam_angle_u-=1.0/30
-#         cPosition()
-#         glutPostRedisplay()
-#     elif key == 'r':
-#         cam_radius=5.0
-#         cam_angle_u=0
-#         cam_angle_v=0
-#         cPosition()
-#         glutPostRedisplay()
-#         return
-#     elif key == 'q':
-#         orbitL()
-#         glutPostRedisplay()
-#         return
-#     elif key == 'Q':
-#         orbitR()
-#         glutPostRedisplay()
-#         return
-#     else:
-#         return
-
 
 
 glutInit()
@@ -416,8 +267,4 @@ init_stars()
 glutDisplayFunc(draw) #执行显示
 glutReshapeFunc(reshape)
 glutIdleFunc(myidle)#动画效果
-#glutKeyboardFunc(keyboard)
 glutMainLoop() #进入glut事件处理循环
-
-
-
