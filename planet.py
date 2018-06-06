@@ -4,7 +4,6 @@ from OpenGL.GLUT import *
 import math
 import random
 from PIL import Image
-import wx
 
 wide=400
 height=400
@@ -314,36 +313,85 @@ def select(button,state,x,y):
     # glFlush()
     if hits:
         # print("success")
-        # processHits(hits, selectBuff)
         process(selectBuff[3])
     else:
         print("Please click on the sun or planets!")
 
     glutPostRedisplay()
 
-# def processHits(hits,buffer):
 
 def process(id):
+    global subWin1,subWin2,subWin3,subWin4,subWin5,subWin6,subWin7,subWin8,subWin9
     if id == 1:
+        # destroyAllSubWin()
         print ("You clicked on the Sun!")
+        subWin1 = glutCreateSubWindow(mainWin, 10, 10, 100, 100)
+        glutDisplayFunc(draw)
+        print(subWin1)
     elif id == 2:
+        destroyAllSubWin()
         print ("You clicked on Mercury!")
+        subWin2 = glutCreateSubWindow(mainWin, 10, 10, 100, 100)
+        glutDisplayFunc(draw)
     elif id == 3:
+        destroyAllSubWin()
         print ("You clicked on Venus!")
+        subWin3 = glutCreateSubWindow(mainWin, 10, 10, 100, 100)
+        glutDisplayFunc(draw)
     elif id == 4:
+        destroyAllSubWin()
         print ("You clicked on Earth!")
+        subWin4 = glutCreateSubWindow(mainWin, 10, 10, 100, 100)
+        glutDisplayFunc(draw)
     elif id == 5:
+        destroyAllSubWin()
         print ("You clicked on Mars!")
+        subWin5 = glutCreateSubWindow(mainWin, 10, 10, 100, 100)
+        glutDisplayFunc(draw)
     elif id == 6:
+        destroyAllSubWin()
         print ("You clicked on Jupiter!")
+        subWin6 = glutCreateSubWindow(mainWin, 10, 10, 100, 100)
+        glutDisplayFunc(draw)
     elif id == 7:
+        destroyAllSubWin()
         print ("You clicked on Saturn!")
-    elif id == 8:
+        subWin7 = glutCreateSubWindow(mainWin, 10, 10, 100, 100)
+        glutDisplayFunc(draw)
+    if id == 8:
+        destroyAllSubWin()
         print ("You clicked on Uranus!")
+        subWin8 = glutCreateSubWindow(mainWin, 10, 10, 100, 100)
+        glutDisplayFunc(draw)
+        print(subWin8)
     elif id == 9:
+        destroyAllSubWin()
         print ("You clicked on Neptune!")
+        subWin9 = glutCreateSubWindow(mainWin, 10, 10, 100, 100)
+        glutDisplayFunc(draw)
     else:
+        destroyAllSubWin()
         print ("Nothing was clicked on!")
+
+def destroyAllSubWin():
+    if subWin1 != None:
+        glutDestroyWindow(subWin1)
+    if subWin2 != None:
+        glutDestroyWindow(subWin2)
+    if subWin3 != None:
+        glutDestroyWindow(subWin3)
+    if subWin4 != None:
+        glutDestroyWindow(subWin4)
+    if subWin5 != None:
+        glutDestroyWindow(subWin5)
+    if subWin6 != None:
+        glutDestroyWindow(subWin6)
+    if subWin7 != None:
+        glutDestroyWindow(subWin7)
+    if subWin8 != None:
+        glutDestroyWindow(subWin8)
+    if subWin9 != None:
+        glutDestroyWindow(subWin9)
 
 def myidle():
     global day
@@ -353,11 +401,14 @@ def myidle():
     glutPostRedisplay()
 
 
+
+
+
 glutInit()
 glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
 glutInitWindowSize(wide,height)
 glutInitWindowPosition(100, 100)
-glutCreateWindow("Solar System")
+mainWin = glutCreateWindow("Solar System")
 init()
 init_stars()
 glutDisplayFunc(draw) #执行显示
@@ -365,3 +416,6 @@ glutReshapeFunc(reshape)
 glutIdleFunc(myidle)
 glutMouseFunc(select)
 glutMainLoop() #进入glut事件处理循环
+
+
+
