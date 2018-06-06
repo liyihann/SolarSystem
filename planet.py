@@ -4,7 +4,11 @@ from OpenGL.GLUT import *
 import math
 import random
 from PIL import Image
+import wx
 
+wide=400
+height=400
+size=10
 day = 0
 mercuryYear=0
 venusYear=0
@@ -25,6 +29,8 @@ cam_position=[0 for i in range(3)]
 cam_angle_u = 0.3
 cam_angle_v = 0.3
 state = 1
+
+
 
 def init():
     global g_text,sun_texture,mercury_texture,venus_texture,earth_texture,mars_texture,jupiter_texture,saturn_texture,uranus_texture,neptune_texture
@@ -82,54 +88,72 @@ def stars():
 
 
 def drawSun():
+    # glLoadName(1)
     glPushMatrix()
+    glPushName(1)
     glBindTexture(GL_TEXTURE_2D,sun_texture)
     gluSphere(g_text,0.6,32,32)
+    glPopName()
     glPopMatrix()
 
 def drawMercury():
+    # glLoadName(2)
     glPushMatrix()
+    glPushName(2)
     glBindTexture(GL_TEXTURE_2D, mercury_texture)
     glRotatef (float(mercuryYear), 0.0, 0.0, 1.0)
     glTranslatef (0.8, 0.0, 0.0)
     glRotatef (float(day), 0.0, 0.0, 1.0)
     gluSphere(g_text,0.13, 20, 16) #draw smaller planet
+    glPopName()
     glPopMatrix()
 
 def drawVenus():
+    # glLoadName(3)
     glPushMatrix()
+    glPushName(3)
     glBindTexture(GL_TEXTURE_2D, venus_texture)
     glRotatef (GLfloat(venusYear), 0.0, 0.0, 1.0)
     glTranslatef (1.3, 0.0, 0.0)
     glRotatef (float(day), 0.0, 0.0, 1.0)
     gluSphere(g_text,0.2, 20, 16) #draw smaller planet
+    glPopName()
     glPopMatrix()
 
 def drawEarth():
+    # glLoadName(4)
     glPushMatrix()
+    glPushName(4)
     glBindTexture(GL_TEXTURE_2D, earth_texture)
     glRotatef (GLfloat(year), 0.0, 0.0, 1.0)
     glTranslatef (1.8, 0.0, 0.0)
     glRotatef (GLfloat(day), 0.0, 0.0, 1.0)
     gluSphere(g_text,0.16, 20, 16) #draw smaller planet
+    glPopName()
     glPopMatrix()
 
 def drawMars():
+    # glLoadName(5)
     glPushMatrix()
+    glPushName(5)
     glBindTexture(GL_TEXTURE_2D, mars_texture)
     glRotatef (GLfloat(marsYear), 0.0, 0.0, 1.0)
     glTranslatef (2.2, 0.0, 0.0)
     glRotatef (GLfloat(day), 0.0, 0.0, 1.0)
     gluSphere(g_text,0.14, 20, 16) #draw smaller planet
+    glPopName()
     glPopMatrix()
 
 def drawJupiter():
+    # glLoadName(6)
     glPushMatrix()
+    glPushName(6)
     glBindTexture(GL_TEXTURE_2D, mars_texture)
     glRotatef (GLfloat(jupiterYear), 0.0, 0.0, 1.0)
     glTranslatef (2.7, 0.0, 0.0)
     glRotatef (GLfloat(day), 0.0, 0.0, 1.0)
     gluSphere(g_text,0.22, 20, 16) #draw smaller planet
+    glPopName()
     glPopMatrix()
 
 def park():
@@ -141,33 +165,41 @@ def park():
     glEnd()
 
 def drawSaturn():
+    # glLoadName(7)
     glPushMatrix()
+    glPushName(7)
     glBindTexture(GL_TEXTURE_2D, saturn_texture)
     glRotatef (GLfloat(saturnYear), 0.0, 0.0, 1.0)
-
     glTranslatef (3.15, 0.0, 0.0)
     glRotatef (GLfloat(day), 0.0, 0.0, 1.0)
     gluSphere(g_text,0.14, 20, 16) #draw smaller planet
     glRotatef(0.2, 1.0, 0.0, 0.0)
     park()
+    glPopName()
     glPopMatrix()
 
 def drawUranus():
+    # glLoadName(8)
     glPushMatrix()
+    glPushName(8)
     glBindTexture(GL_TEXTURE_2D, uranus_texture)
     glRotatef (GLfloat(uranusYear), 0.0, 0.0, 1.0)
     glTranslatef (3.55, 0.0, 0.0)
     glRotatef (GLfloat(day), 0.0, 0.0, 1.0)
     gluSphere(g_text,0.12, 20, 16) #draw smaller planet
+    glPopName()
     glPopMatrix()
 
 def drawNeptune():
+    # glLoadName(9)
     glPushMatrix()
+    glPushName(9)
     glBindTexture(GL_TEXTURE_2D, neptune_texture)
     glRotatef (GLfloat(jupiterYear), 0.0, 0.0, 1.0)
     glTranslatef (3.8, 0.0, 0.0)
     glRotatef (GLfloat(day), 0.0, 0.0, 1.0)
     gluSphere(g_text,0.10, 20, 16) #draw smaller planet
+    glPopName()
     glPopMatrix()
 
 def rotate():
@@ -198,7 +230,6 @@ def rotate():
         neptuneYear-=360
     glutPostRedisplay()
 
-
 def lPosition():
     y= light_radius * math.cos(light_angle)
     z=light_radius*math.sin(light_angle)
@@ -215,7 +246,11 @@ def draw():
     glEnable(GL_TEXTURE_GEN_S)
     glEnable(GL_TEXTURE_GEN_T)
     glEnable(GL_TEXTURE_2D)
-    stars()
+    glMatrixMode(GL_MODELVIEW)
+    glPushMatrix()
+    # Initialize the names stack
+    # glInitNames()
+    # glPushName(0)
     stars()
     drawSun()
     drawMercury()
@@ -227,9 +262,11 @@ def draw():
     drawUranus()
     drawNeptune()
     rotate()
+    glPopMatrix()
     glDisable(GL_TEXTURE_2D)
     glutSwapBuffers()
     glFlush()
+
 
 def cPosition():
     cam_radius1 = cam_radius*math.cos(cam_angle_v)
@@ -247,11 +284,70 @@ def reshape(w,h):
     glMatrixMode(GL_MODELVIEW)
     cPosition()
 
+BUFSIZE = 512
+selectBuff = (GLuint * BUFSIZE)()
+def select(button,state,x,y):
 
+    if button != GLUT_LEFT_BUTTON or state != GLUT_DOWN:
+        return
+    viewport = (GLint * 4)()
+    glSelectBuffer(BUFSIZE, selectBuff)
+    glGetIntegerv(GL_VIEWPORT, viewport)
+    glMatrixMode(GL_PROJECTION)
+    glInitNames()
+    glPushMatrix()
+    glRenderMode(GL_SELECT)
+    glLoadIdentity()
+    gluPickMatrix(x,viewport[3]-y+viewport[1],10,10,viewport)
+    gluPerspective(60.0, float(wide) / float(height), 1.0, 10)
+    #gluOrtho2D(0.0, wide, 0.0, height)
+    # glOrtho(-10, 10, -10, 10, -10, 10)
+    glMatrixMode(GL_MODELVIEW)
+    draw()
+    glMatrixMode(GL_PROJECTION)
+    glPopMatrix()
+    glMatrixMode(GL_MODELVIEW)
+    # print(x)
+    # print(y)
+    hits = glRenderMode(GL_RENDER)
+    # print(hits)
+    # glFlush()
+    if hits:
+        # print("success")
+        # processHits(hits, selectBuff)
+        process(selectBuff[3])
+    else:
+        print("Please click on the sun or planets!")
+
+    glutPostRedisplay()
+
+# def processHits(hits,buffer):
+
+def process(id):
+    if id == 1:
+        print ("You clicked on the Sun!")
+    elif id == 2:
+        print ("You clicked on Mercury!")
+    elif id == 3:
+        print ("You clicked on Venus!")
+    elif id == 4:
+        print ("You clicked on Earth!")
+    elif id == 5:
+        print ("You clicked on Mars!")
+    elif id == 6:
+        print ("You clicked on Jupiter!")
+    elif id == 7:
+        print ("You clicked on Saturn!")
+    elif id == 8:
+        print ("You clicked on Uranus!")
+    elif id == 9:
+        print ("You clicked on Neptune!")
+    else:
+        print ("Nothing was clicked on!")
 
 def myidle():
     global day
-    day+=5
+    day+=2
     if day>=360:
         day=day-360
     glutPostRedisplay()
@@ -259,12 +355,13 @@ def myidle():
 
 glutInit()
 glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
-glutInitWindowSize(800,600)
+glutInitWindowSize(wide,height)
 glutInitWindowPosition(100, 100)
 glutCreateWindow("Solar System")
 init()
 init_stars()
 glutDisplayFunc(draw) #执行显示
 glutReshapeFunc(reshape)
-glutIdleFunc(myidle)#动画效果
+glutIdleFunc(myidle)
+glutMouseFunc(select)
 glutMainLoop() #进入glut事件处理循环
