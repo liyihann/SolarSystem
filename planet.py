@@ -30,7 +30,16 @@ cam_angle_v = 0.3
 state = 1
 BUFSIZE = 512
 selectBuff = (GLuint * BUFSIZE)()
-
+# isSunSelected=False
+# isMercurySelected=False
+# isVenusSelected=False
+# isEarthSelected=False
+# isMarsSelected=False
+# isJupiterSelected=False
+# isSaturnSelected=False
+# isUranusSelected=False
+# isNeptuneSelected=False
+isSelected=[False for x in range(9)]
 
 def init():
     global g_text, sun_texture, mercury_texture, venus_texture, earth_texture, mars_texture, jupiter_texture, saturn_texture, uranus_texture, neptune_texture,background_texture
@@ -95,11 +104,34 @@ def draw():
     drawUranus()
     drawNeptune()
     rotate()
-
     glPopMatrix()
     glDisable(GL_TEXTURE_2D)
+    if isSelected[0]:
+        glRectf(-3, -3, 3, 3)
+
+    if isSelected[1]:
+        glColor3f(1,0,0)
+        glRectf(-1, -1, 1, 1)
+    if isSelected[2]:
+        glColor3f(0,1,0)
+        glRectf(-1, -1, 1, 1)
+    if isSelected[3]:
+        glRectf(-1, -1, 1, 1)
+    if isSelected[4]:
+        glRectf(-1, -1, 1, 1)
+    if isSelected[5]:
+        glRectf(-1, -1, 1, 1)
+    if isSelected[6]:
+        glRectf(-1, -1, 1, 1)
+    if isSelected[7]:
+        glColor3f(1, 0, 0)
+        glRectf(-1, -1, 1, 1)
+    if isSelected[8]:
+        glColor3f(0, 1, 0)
+        glRectf(-1, -1, 1, 1)
     glutSwapBuffers()
     glFlush()
+
 
 def load_texture(filename):
     image = Image.open(filename)
@@ -111,7 +143,6 @@ def load_texture(filename):
     texture = glGenTextures(1)
     glBindTexture(GL_TEXTURE_2D, texture)  # 2d texture (x and y size)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
-
     glTexImage2D(GL_TEXTURE_2D, 0, 3, ix, iy, 0, GL_RGBA, GL_UNSIGNED_BYTE, image)
     # set the texture's minification properties (mapping textures to bigger areas)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
@@ -359,22 +390,20 @@ def select(button,state,x,y):
 
     hits = glRenderMode(GL_RENDER)
     if hits:
-
         process(selectBuff[3])
     else:
         print("Please click on the sun or planets!")
-
+        for i in range(len(isSelected)):
+            isSelected[i] = False
     glutPostRedisplay()
 
 
 def process(id):
-    global subWin1,subWin2,subWin3,subWin4,subWin5,subWin6,subWin7,subWin8,subWin9
+    muteOthers(id)
     if id == 1:
         print ("You clicked on the Sun!")
-
     elif id == 2:
         print ("You clicked on Mercury!")
-
     elif id == 3:
         print ("You clicked on Venus!")
 
@@ -395,14 +424,46 @@ def process(id):
 
     elif id == 9:
         print ("You clicked on Neptune!")
-
     else:
         print ("Nothing was clicked on!")
 
 
+def muteOthers(id):
+    global isSelected
+    for i in range(len(isSelected)):
+        isSelected[i]=False
+    isSelected[id - 1] = True
 
-def drawInfo(str):
-    pass
+
+
+def load_info(filename):
+    image = Image.open(filename)
+    ix = image.size[0]
+    iy = image.size[1]
+
+    image = image.tobytes("raw", "RGBX", 0, -1)
+    # Create Texture
+    texture = glGenTextures(1)
+    glBindTexture(GL_TEXTURE_2D, texture)  # 2d texture (x and y size)
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, ix, iy, 0, GL_RGBA, GL_UNSIGNED_BYTE, image)
+    # set the texture's minification properties (mapping textures to bigger areas)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+    # set the texture's stretching properties (mapping textures to smaller areas)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE)
+    return texture
+
+# def drawInfo():
+#     # glMatrixMode(GL_MODELVIEW)
+#     # sun_info = load_texture("./information/suninfo.jpg")
+#     # glPushMatrix()
+#     glColor3f(1, 0, 0)
+#     # glBindTexture(GL_TEXTURE_2D,sun_info)
+#     glRectf(-0.5, -0.5, 0.5, 0.5)
+#     glFlush()
+#     # glPopMatrix()
+#     # glMatrixMode(GL_MODELVIEW)
 
 
 def myidle():
