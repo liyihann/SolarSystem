@@ -1,12 +1,12 @@
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
-
 import math
 import random
 from PIL import Image
-wide=400
-height=400
+
+wide=800
+height=600
 size=10
 day = 0
 mercuryYear=0
@@ -30,23 +30,16 @@ cam_angle_v = 0.3
 state = 1
 BUFSIZE = 512
 selectBuff = (GLuint * BUFSIZE)()
-# isSunSelected=False
-# isMercurySelected=False
-# isVenusSelected=False
-# isEarthSelected=False
-# isMarsSelected=False
-# isJupiterSelected=False
-# isSaturnSelected=False
-# isUranusSelected=False
-# isNeptuneSelected=False
+
 isSelected=[False for x in range(9)]
 
 def init():
     global g_text, sun_texture, mercury_texture, venus_texture, earth_texture, mars_texture, jupiter_texture, saturn_texture, uranus_texture, neptune_texture,background_texture
+    global suninfo,mercuryinfo,venusinfo,earthinfo,marsinfo,jupiterinfo,saturninfo,uranusinfo,neptuneinfo
     glClearColor(0.0, 0.0, 0.0, 0.0)
     lPosition()
     glShadeModel(GL_SMOOTH)
-    glEnable(GL_LIGHTING)
+    # glEnable(GL_LIGHTING)
     glEnable(GL_LIGHT0)
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_COLOR_MATERIAL)
@@ -61,16 +54,20 @@ def init():
     saturn_texture =load_texture("./texture/saturn.jpg")
     uranus_texture = load_texture("./texture/uranus.jpg")
     neptune_texture = load_texture("./texture/neptune.jpg")
-    background_texture = load_texture("./texture/background.jpg")
+    # background_texture = load_texture("./texture/background.jpg")
+    suninfo = load_texture("./information/suninfo.jpg")
+    mercuryinfo = load_texture("./information/mercuryinfo.jpg")
+    venusinfo = load_texture("./information/venusinfo.jpg")
+    earthinfo = load_texture("./information/earthinfo.jpg")
+    marsinfo = load_texture("./information/marsinfo.jpg")
+    jupiterinfo = load_texture("./information/jupiterinfo.jpg")
+    saturninfo = load_texture("./information/saturninfo.jpg")
+    uranusinfo = load_texture("./information/uranusinfo.jpg")
+    neptuneinfo = load_texture("./information/neptuneinfo.jpg")
     ''' init_stars  '''
     for i in range(0,2000):
         for j in range(0,3):
             star[i][j] = random.random()% 20 - 10
-
-# def init_stars():
-#     for i in range(0,2000):
-#         for j in range(0,3):
-#             star[i][j] = random.random()% 20 - 10
 
 def reshape( w, h):
     glViewport(0, 0, GLsizei(w), GLsizei(h))
@@ -104,31 +101,81 @@ def draw():
     drawUranus()
     drawNeptune()
     rotate()
+    if isSelected[0]:
+        glPushMatrix()
+        glLoadIdentity()
+        glBindTexture(GL_TEXTURE_2D, suninfo)
+        glTranslatef(-2.8, 1.5, 0)
+        gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+        glRectf(0, 0,1, 1)
+        glPopMatrix()
+    if isSelected[1]:
+        glPushMatrix()
+        glLoadIdentity()
+        glBindTexture(GL_TEXTURE_2D, mercuryinfo)
+        glTranslatef(-2.8, 1.5, 0)
+        gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+        glRectf(0, 0,1, 1)
+        glPopMatrix()
+    if isSelected[2]:
+        glPushMatrix()
+        glLoadIdentity()
+        glBindTexture(GL_TEXTURE_2D, venusinfo)
+        glTranslatef(-2.8, 1.5, 0)
+        gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+        glRectf(0, 0,1, 1)
+        glPopMatrix()
+    if isSelected[3]:
+        glPushMatrix()
+        glLoadIdentity()
+        glBindTexture(GL_TEXTURE_2D, earthinfo)
+        glTranslatef(-2.8, 1.5, 0)
+        gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+        glRectf(0, 0,1, 1)
+        glPopMatrix()
+    if isSelected[4]:
+        glPushMatrix()
+        glLoadIdentity()
+        glBindTexture(GL_TEXTURE_2D, marsinfo)
+        glTranslatef(-2.8, 1.5, 0)
+        gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+        glRectf(0, 0,1, 1)
+        glPopMatrix()
+    if isSelected[5]:
+        glPushMatrix()
+        glLoadIdentity()
+        glBindTexture(GL_TEXTURE_2D, jupiterinfo)
+        glTranslatef(-2.8, 1.5, 0)
+        gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+        glRectf(0, 0,1, 1)
+        glPopMatrix()
+    if isSelected[6]:
+        glPushMatrix()
+        glLoadIdentity()
+        glBindTexture(GL_TEXTURE_2D, saturninfo)
+        glTranslatef(-2.8, 1.5, 0)
+        gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+        glRectf(0, 0,1, 1)
+        glPopMatrix()
+    if isSelected[7]:
+        glPushMatrix()
+        glLoadIdentity()
+        glBindTexture(GL_TEXTURE_2D, uranusinfo)
+        glTranslatef(-2.8, 1.5, 0)
+        gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+        glRectf(0, 0,1, 1)
+        glPopMatrix()
+    if isSelected[8]:
+        glPushMatrix()
+        glLoadIdentity()
+        glBindTexture(GL_TEXTURE_2D, neptuneinfo)
+        glTranslatef(-2.8, 1.5, 0)
+        gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+        glRectf(0, 0,1, 1)
+        glPopMatrix()
     glPopMatrix()
     glDisable(GL_TEXTURE_2D)
-    if isSelected[0]:
-        glRectf(-3, -3, 3, 3)
 
-    if isSelected[1]:
-        glColor3f(1,0,0)
-        glRectf(-1, -1, 1, 1)
-    if isSelected[2]:
-        glColor3f(0,1,0)
-        glRectf(-1, -1, 1, 1)
-    if isSelected[3]:
-        glRectf(-1, -1, 1, 1)
-    if isSelected[4]:
-        glRectf(-1, -1, 1, 1)
-    if isSelected[5]:
-        glRectf(-1, -1, 1, 1)
-    if isSelected[6]:
-        glRectf(-1, -1, 1, 1)
-    if isSelected[7]:
-        glColor3f(1, 0, 0)
-        glRectf(-1, -1, 1, 1)
-    if isSelected[8]:
-        glColor3f(0, 1, 0)
-        glRectf(-1, -1, 1, 1)
     glutSwapBuffers()
     glFlush()
 
@@ -151,32 +198,6 @@ def load_texture(filename):
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE)
     return texture
 
-def drawBackground():
-    glDisable(GL_LIGHTING)
-    glDisable(GL_DEPTH_TEST)
-    glEnable(GL_TEXTURE_2D)
-    glLoadIdentity()
-    # glCullFace(GL_BACK)
-    glPushMatrix()
-    glScalef(100, 70, 1)
-    glTranslatef(0, 0, -150)
-    # glEnable(GL_DEPTH_TEST)
-    # glBlendFunc(GL_SRC_ALPHA,GL_ONE)
-    glBindTexture(GL_TEXTURE_2D,background_texture)
-
-    # glDisable(GL_DEPTH_ TEST)
-    glBegin(GL_QUADS);
-    glTexCoord2d(0.0, 0.0)
-    glVertex2d(-1.0, -1.0)
-    glTexCoord2d(1.0, 0.0)
-    glVertex2d(+1.0, -1.0)
-    glTexCoord2d(1.0, 1.0)
-    glVertex2d(+1.0, +1.0)
-    glTexCoord2d(0.0, 1.0)
-    glVertex2d(-1.0, +1.0)
-    glEnd()
-    glPopMatrix()
-    glEnable(GL_DEPTH_TEST)
 
 def stars():
     glBegin(GL_POINTS)
@@ -184,7 +205,6 @@ def stars():
     for i in range(0,2000):
         glVertex3f(star[i][0], star[i][1], star[i][2])
     glEnd()
-
 
 def drawSun():
     # glLoadName(1)
@@ -207,7 +227,6 @@ def drawMercury():
     glPopName()
     glPopMatrix()
     drawOrbit(0.8)
-
 
 def drawVenus():
     # glLoadName(3)
@@ -297,8 +316,6 @@ def drawUranus():
     glPopMatrix()
     drawOrbit(3.55)
 
-
-
 def drawNeptune():
     # glLoadName(9)
     glPushMatrix()
@@ -314,19 +331,19 @@ def drawNeptune():
 
 def rotate():
     global day, mercuryYear, venusYear, year, marsYear, jupiterYear, saturnYear, uranusYear, neptuneYear
-    mercuryYear+=6
+    mercuryYear+=3
     if mercuryYear>=360:
         mercuryYear-=360
-    venusYear+=3
+    venusYear+=2
     if venusYear>=360:
         venusYear-=360
-    year+=2
+    year+=0.8
     if year>=360:
         year-=360
-    marsYear+=1
+    marsYear+=0.8
     if marsYear>=360:
         marsYear-=360
-    jupiterYear+=0.25
+    jupiterYear+=0.3
     if jupiterYear>=360:
         jupiterYear-=360
     saturnYear+=0.2
@@ -335,7 +352,7 @@ def rotate():
     uranusYear+=0.05
     if uranusYear>=360:
         uranusYear-=360
-    neptuneYear+=0.05
+    neptuneYear+=0.01
     if neptuneYear>=360:
         neptuneYear-=360
     glutPostRedisplay()
@@ -353,9 +370,6 @@ def lPosition():
     light_position=[3.0,y,z,0.0]
     glLightfv(GL_LIGHT0,GL_POSITION,light_position)
 
-
-
-
 def cPosition():
     cam_radius1 = cam_radius*math.cos(cam_angle_v)
     cam_position[0] = cam_radius1*math.cos(cam_angle_u)
@@ -363,9 +377,6 @@ def cPosition():
     cam_position[2] = cam_radius*math.sin(cam_angle_v)
     glLoadIdentity()
     gluLookAt(cam_position[0],cam_position[1],cam_position[2], 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
-
-
-
 
 def select(button,state,x,y):
 
@@ -397,7 +408,6 @@ def select(button,state,x,y):
             isSelected[i] = False
     glutPostRedisplay()
 
-
 def process(id):
     muteOthers(id)
     if id == 1:
@@ -427,44 +437,11 @@ def process(id):
     else:
         print ("Nothing was clicked on!")
 
-
 def muteOthers(id):
     global isSelected
     for i in range(len(isSelected)):
         isSelected[i]=False
     isSelected[id - 1] = True
-
-
-
-def load_info(filename):
-    image = Image.open(filename)
-    ix = image.size[0]
-    iy = image.size[1]
-
-    image = image.tobytes("raw", "RGBX", 0, -1)
-    # Create Texture
-    texture = glGenTextures(1)
-    glBindTexture(GL_TEXTURE_2D, texture)  # 2d texture (x and y size)
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, ix, iy, 0, GL_RGBA, GL_UNSIGNED_BYTE, image)
-    # set the texture's minification properties (mapping textures to bigger areas)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-    # set the texture's stretching properties (mapping textures to smaller areas)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE)
-    return texture
-
-# def drawInfo():
-#     # glMatrixMode(GL_MODELVIEW)
-#     # sun_info = load_texture("./information/suninfo.jpg")
-#     # glPushMatrix()
-#     glColor3f(1, 0, 0)
-#     # glBindTexture(GL_TEXTURE_2D,sun_info)
-#     glRectf(-0.5, -0.5, 0.5, 0.5)
-#     glFlush()
-#     # glPopMatrix()
-#     # glMatrixMode(GL_MODELVIEW)
-
 
 def myidle():
     global day
@@ -472,9 +449,6 @@ def myidle():
     if day>=360:
         day=day-360
     glutPostRedisplay()
-
-
-
 
 
 glutInit()
