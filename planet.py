@@ -2,7 +2,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 from PIL import Image
-import math
+import math,time
 
 wide=800
 height=600
@@ -19,8 +19,8 @@ neptuneYear=0
 g_text=gluNewQuadric()
 star = [[0 for i in range(3)] for i in range(2000)]
 
-light_angle = 0.0
-light_radius = 8.0
+# light_angle = 0.0
+# light_radius = 8.0
 cam_radius = 7.0
 cam_radius1=0.0
 cam_position=[0 for i in range(3)]
@@ -33,7 +33,7 @@ selectBuff = (GLuint * BUFSIZE)()
 isSelected=[False for x in range(9)]
 
 def init():
-    global g_text, sun_texture, mercury_texture, venus_texture, earth_texture, mars_texture, jupiter_texture, saturn_texture, uranus_texture, neptune_texture,background_texture
+    global g_text, sun_texture, mercury_texture, venus_texture, earth_texture,moon_texture, mars_texture, jupiter_texture, saturn_texture, uranus_texture, neptune_texture,background_texture
     global suninfo,mercuryinfo,venusinfo,earthinfo,marsinfo,jupiterinfo,saturninfo,uranusinfo,neptuneinfo
     glClearColor(0.0, 0.0, 0.0, 0.0)
     glShadeModel(GL_SMOOTH)#选择平面明暗模式或光滑明暗模式
@@ -46,6 +46,7 @@ def init():
     mercury_texture = load_texture("./texture/mercury.bmp")
     venus_texture = load_texture("./texture/venus.jpg")
     earth_texture = load_texture("./texture/earth.jpg")
+    moon_texture = load_texture("./texture/moon.bmp")
     mars_texture = load_texture("./texture/mars.jpg")
     jupiter_texture = load_texture("./texture/jupiter.bmp")
     saturn_texture =load_texture("./texture/saturn.jpg")
@@ -146,6 +147,18 @@ def drawVenus():
     glPopMatrix()
     drawOrbit(1.3)
 
+def drawMoon():
+    glPushMatrix()
+    glPushName(10)
+    glBindTexture(GL_TEXTURE_2D, moon_texture)
+    glRotatef (GLfloat(year), 0.0, 0.0, 1.0)
+    glTranslatef (0.3, 0.0, 0.0)
+    glRotatef (GLfloat(day), 0.0, 0.0, 1.0)
+    gluSphere(g_text,0.05, 20, 16)
+    glPopName()
+    glPopMatrix()
+    drawOrbit(0.3)
+
 def drawEarth():
     glPushMatrix()
     glPushName(4)
@@ -155,6 +168,7 @@ def drawEarth():
     glRotatef (GLfloat(day), 0.0, 0.0, 1.0)
     gluSphere(g_text,0.16, 20, 16)
     glPopName()
+    drawMoon()
     glPopMatrix()
     drawOrbit(1.8)
 
@@ -236,7 +250,7 @@ def rotate():
     venusYear+=2
     if venusYear>=360:
         venusYear-=360
-    year+=0.8
+    year+=1.0
     if year>=360:
         year-=360
     marsYear+=0.8
@@ -406,6 +420,93 @@ def drawinfo():
         glRectf(0, 0,1, 1)
         glPopMatrix()
 
+def orbitL():
+    global day,mercuryYear,venusYear,year,marsYear,jupiterYear,saturnYear,uranusYear,neptuneYear
+    mercuryYear=(mercuryYear+12)%360
+    venusYear=(venusYear+20)%360
+    year= (year + 8) % 360
+    marsYear=(marsYear+6)%360
+    jupiterYear=(jupiterYear+5)%360
+    saturnYear=(saturnYear+4)%360
+    uranusYear=(uranusYear+3)%360
+    neptuneYear=(neptuneYear+1)%360
+    day=(day+30)%360
+
+def orbitR():
+    global day,mercuryYear,venusYear,year,marsYear,jupiterYear,saturnYear,uranusYear,neptuneYear
+    mercuryYear=(mercuryYear-12)%360
+    venusYear=(venusYear-20)%360
+    year= (year - 8) % 360
+    marsYear=(marsYear-6)%360
+    jupiterYear=(jupiterYear-5)%360
+    saturnYear=(saturnYear-4)%360
+    uranusYear=(uranusYear-3)%360
+    neptuneYear=(neptuneYear-1)%360
+    day=(day-30)%360
+
+def keyboard(key,x,y):
+    global day,year,light_angle,cam_radius,cam_angle_v,cam_angle_u,camera_position
+    if key == b'k':
+         cam_radius+=0.2
+         cPosition()
+         glutPostRedisplay()
+         return
+    elif key == b'K':
+         cam_radius-=0.2
+         cPosition()
+         glutPostRedisplay()
+         time.sleep(0.1)
+         return
+    elif key == b'w':
+        cam_angle_v+=1.0/30
+        if cam_angle_v>1.0:
+            cam_angle_v=1.0
+        cPosition()
+        glutPostRedisplay()
+        time.sleep(0.1)
+        return
+    elif key == b's':
+        cam_angle_v-=1.0/30
+        if cam_angle_v<-1.0:
+            cam_angle_v=-1.0
+        cPosition()
+        glutPostRedisplay()
+        time.sleep(0.1)
+        return
+    elif key == b'a':
+        cam_angle_u+=1.0/30
+        cPosition()
+        glutPostRedisplay()
+        time.sleep(0.1)
+        return
+    elif key == b'd':
+        cam_angle_u-=1.0/30
+        cPosition()
+        glutPostRedisplay()
+        time.sleep(0.1)
+        return
+    elif key == b'r':
+        cam_radius=5.0
+        cam_angle_u=0
+        cam_angle_v=0
+        cPosition()
+        glutPostRedisplay()
+        time.sleep(0.1)
+        return
+    elif key == b'q':
+        orbitL()
+        glutPostRedisplay()
+        time.sleep(0.1)
+        return
+    elif key == b'Q':
+        orbitR()
+        glutPostRedisplay()
+        time.sleep(0.1)
+        return
+    else:
+        time.sleep(0.1)
+        return
+
 def myidle(): # rotation
     global day
     day+=1
@@ -413,6 +514,9 @@ def myidle(): # rotation
         day=day-360
     glutPostRedisplay()
 
+def myTimer():
+    draw()
+    glutTimerFunc(20, myTimer, 1)
 
 glutInit()
 glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
@@ -422,7 +526,9 @@ glutCreateWindow("Solar System")# 产生一个顶层的窗口，参数为窗口�
 init()
 glutDisplayFunc(draw) #执行显示
 glutReshapeFunc(reshape)# 改变当前窗口的大小时重绘
-glutIdleFunc(myidle)#当没有窗口事件到达时，GLUT程序功能可以执行后台处理任务或连续动画。如果启用，这个idle function会被不断调用，直到有窗口事件发生
 glutMouseFunc(select)
+glutKeyboardFunc(keyboard)
+glutIdleFunc(myidle)#当没有窗口事件到达时，GLUT程序功能可以执行后台处理任务或连续动画。如果启用，这个idle function会被不断调用，直到有窗口事件发生
+# glutTimerFunc(20,myTimer,1)
 glutMainLoop() #让glut程序进入事件循环。在一个glut程序中最多只能调用一次。一旦调用，会直到程序结束才返回
 
